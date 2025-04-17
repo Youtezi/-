@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>抖音链接转换工具</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 40px; background-color: #f9f9f9; }
+        h2 { color: #333; }
+        input[type="text"] {
+            width: 80%; padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px; font-size: 16px;
+            margin-left: 10px; cursor: pointer;
+            background-color: #007bff; color: white; border: none; border-radius: 4px;
+        }
+        #result {
+            margin-top: 20px; padding: 10px; background-color: #fff;
+            border: 1px solid #ccc; border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h2>抖音口令链接 → 电脑端链接转换</h2>
+    <input type="text" id="inputUrl" placeholder="请粘贴抖音口令链接，如：https://v.douyin.com/i574m9SB/" />
+    <button onclick="convert()">开始转换</button>
+    <div id="result"></div>
+
+    <script>
+        function convert() {
+            var inputUrl = document.getElementById("inputUrl").value.trim();
+            if (!inputUrl) {
+                alert("请输入抖音链接！");
+                return;
+            }
+
+            var api = "http://api5.92k.fun/api/xb/api/short_video_parse.php?url=" + encodeURIComponent(inputUrl);
+            fetch(api)
+                .then(res => res.json())
+                .then(data => {
+                    if (data && data.url) {
+                        document.getElementById("result").innerHTML =
+                            "电脑直链：<a href='" + data.url + "' target='_blank'>" + data.url + "</a>";
+                    } else {
+                        document.getElementById("result").innerHTML = "解析失败，请检查链接是否正确。";
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    document.getElementById("result").innerHTML = "请求出错：" + err;
+                });
+        }
+    </script>
+</body>
+</html>
